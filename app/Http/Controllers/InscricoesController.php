@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Eventos;
 use App\Models\Inscricoes;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class InscricoesController extends Controller
 {
@@ -14,17 +16,14 @@ class InscricoesController extends Controller
      */
     public function index()
     {
-        //
-    }
+        $user = Auth::user();
+        $eventos_id = $user->inscricoes->pluck('eventos_id')->toArray();
+        $inscricoes = Inscricoes::select('inscricoes.id as inscricao_id', 'inscricoes.eventos_id as eventos_id', 'eventos.*')
+            ->join('eventos', 'eventos.id', '=', 'inscricoes.eventos_id')
+            ->whereIn('eventos.id', $eventos_id)
+            ->get();
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return view('inscricoes.index', compact('inscricoes'));
     }
 
     /**
@@ -35,41 +34,15 @@ class InscricoesController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $user_id = $request->user()->id;
+        $evento_id = $request->input('id');
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Inscricoes  $inscricoes
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Inscricoes $inscricoes)
-    {
-        //
-    }
+        Inscricoes::create([
+            'users_id' => $user_id,
+            'eventos_id' => $evento_id,
+        ]);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Inscricoes  $inscricoes
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Inscricoes $inscricoes)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Inscricoes  $inscricoes
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Inscricoes $inscricoes)
-    {
-        //
+        return back()->with('success', 'Inscrição realizada com sucesso!');
     }
 
     /**
@@ -78,8 +51,9 @@ class InscricoesController extends Controller
      * @param  \App\Models\Inscricoes  $inscricoes
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Inscricoes $inscricoes)
+    public function destroy(Inscricoes $inscricao)
     {
-        //
+        $inscricao->delete();
+        return back()->with('success', 'Inscrição removida com sucesso!');
     }
 }

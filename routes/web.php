@@ -1,6 +1,10 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\EventosController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InscricoesController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,6 +27,6 @@ Route::middleware(['web'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/', [HomeController::class, 'home'])->name('home');
 
-    // Route::resource('receitas', ReceitaController::class);
-    // Route::resource('ingredientes', IngredienteController::class);
+    Route::resource('eventos', EventosController::class);
+    Route::resource('inscricao', InscricoesController::class);
 });

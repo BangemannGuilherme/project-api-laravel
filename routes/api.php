@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\InscricoesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,3 +18,11 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::middleware('auth:sanctum')->post('/inscricao', function (Request $request, $id) {
+    $inscricao = new InscricoesController;
+
+    return $inscricao->store($request, $id);
+})->name('api.inscricao');
+
+// Route::get('inscricao', [InscricoesController::class, 'store'])->name('api.inscricao');
