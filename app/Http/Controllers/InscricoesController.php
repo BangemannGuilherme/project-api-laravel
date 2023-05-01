@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\MailSender;
 use App\Models\Eventos;
 use App\Models\Inscricoes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class InscricoesController extends Controller
 {
@@ -42,6 +44,16 @@ class InscricoesController extends Controller
             'eventos_id' => $evento_id,
         ]);
 
+        $evento = Eventos::find($evento_id);
+
+        $details = [
+            'title' => 'Inscrição efetuada com sucesso!',
+            'body' => "Você realizou a inscrição no seguinte evento:<br><h3>$evento->nome</h3><br>Você pode acompanhar as suas inscrições em <a href=\"http://177.44.248.74/inscricao\">Minhas inscrições</a>."
+        ];
+
+        // Envia e-mail
+        $this->sendMail($details);
+
         return back()->with('success', 'Inscrição realizada com sucesso!');
     }
 
@@ -53,7 +65,23 @@ class InscricoesController extends Controller
      */
     public function destroy(Inscricoes $inscricao)
     {
+        $evento = Eventos::find($inscricao->eventos_id);
+
         $inscricao->delete();
+
+        $details = [
+            'title' => 'Inscrição removida com sucesso!',
+            'body' => "Você removeu a sua inscrição do seguinte evento:<br><h3>$evento->nome</h3><br>Você pode acompanhar as suas inscrições em <a href=\"http://177.44.248.74/inscricao\">Minhas inscrições</a>."
+        ];
+
+        // Envia e-mail
+        $this->sendMail($details);
+
         return back()->with('success', 'Inscrição removida com sucesso!');
+    }
+
+    private function sendMail(Array $details)
+    {
+        Mail::to('your_receiver_email@gmail.com')->send(new MailSender($details));
     }
 }

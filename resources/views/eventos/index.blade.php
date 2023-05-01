@@ -15,13 +15,14 @@
         @endif
         <div class="table-responsive no-padding">
             <div class="dataTables_wrapper no-footer">
-                <table id="evento_table" class="table table-hover table-bordered table-datatable table-striped" role="grid">
+                <table id="eventos_table" class="table table-bordered table-datatable" role="grid">
                     <thead class="thead-dark">
                         <tr>
                             <th>ID</th>
                             <th>Nome</th>
                             <th>Descrição</th>
-                            <th>Criado em</th>
+                            <th>Data inicial</th>
+                            <th>Data final</th>
                             <th>Ações</th>
                         </tr>
                     </thead>

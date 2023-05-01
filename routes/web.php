@@ -22,6 +22,9 @@ Route::middleware(['web'])->group(function () {
     Route::get('login', [AuthController::class, 'index'])->name('login');
     Route::post('login', [AuthController::class, 'auth'])->name('auth');
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
+
+    Route::get('registro', [AuthController::class, 'registro'])->name('registro');
+    Route::post('registro', [AuthController::class, 'registrar'])->name('registrar');
 });
 
 Route::middleware(['auth'])->group(function () {

@@ -15,7 +15,7 @@
         @endif
         <div class="table-responsive no-padding">
             <div class="dataTables_wrapper no-footer">
-                <table id="inscricao_table" class="table table-hover table-bordered table-datatable table-striped" role="grid">
+                <table id="inscricao_table" class="table table-bordered table-datatable" role="grid">
                     <thead class="thead-dark">
                         <tr>
                             <th>ID</th>
