@@ -10,34 +10,11 @@
         <form method="POST" action="{{ route('inscricao.store', ['id' => $evento->id]) }}">
             @csrf
             <button type="submit" title="{{ $evento->data_final < now() ? 'Evento já ocorreu!' : 'Fazer Inscrição' }}" class="btn btn-success" style="font-size: smaller;" {{ $evento->data_final < now() ? 'disabled' : '' }}>
-                <i class="fa-regular fa-calendar-check"></i>
+                <i class="fa-regular fa-calendar-plus"></i>
             </button>
         </form>
     </td>
 </tr>
-
-<script>
-    function realizarInscricao(id) {
-        let evento_id = id;
-
-        $.ajax ({
-            url: {{ route('api.inscricao') }},
-            type: 'POST',
-            data: {
-                "_token": "{{ csrf_token() }}",
-                "id": evento_id
-            },
-            success: function(result)
-            {
-                console.log(result);
-                // window.location.reload(true);
-            },
-            error: function(xhr, status, error) {
-                console.log(xhr.responseText);
-            }
-        });
-    }
-</script>
 
 <style>
     .table td, .table th {

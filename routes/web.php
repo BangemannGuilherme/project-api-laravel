@@ -32,4 +32,5 @@ Route::middleware(['auth'])->group(function () {
 
     Route::resource('eventos', EventosController::class);
     Route::resource('inscricao', InscricoesController::class);
+    Route::get('checkin', [InscricoesController::class, 'getCheckin'])->name('inscricao.index_checkin');
 });

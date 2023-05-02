@@ -24,6 +24,7 @@ class Inscricoes extends Model
     protected $fillable = [
         'users_id',
         'eventos_id',
+        'checkin',
     ];
 
     public function eventos()

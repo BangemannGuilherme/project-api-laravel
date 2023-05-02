@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\InscricoesController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,5 +25,18 @@ Route::middleware('auth:sanctum')->post('/inscricao', function (Request $request
 
     return $inscricao->store($request, $id);
 })->name('api.inscricao');
+
+Route::post('/eventos', function() {
+    $eventos = App\Models\Eventos::all();
+    return response()->json($eventos);
+});
+
+Route::post('/checkin', function(Request $request) {
+    $inscricaoController = new InscricoesController;
+    $checkin = $inscricaoController->checkin($request);
+
+    return response()->json($checkin);
+})->name('api.checkin');
+
 
 // Route::get('inscricao', [InscricoesController::class, 'store'])->name('api.inscricao');

@@ -5,6 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Sistema - Controle de Eventos</title>
 
+        <!-- Sweet Alert 2 -->
+        <link href="/plugins/sweetalert2/sweetalert2.css" rel="stylesheet">
         <!-- Google Font: Source Sans Pro -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
         <!-- Font Awesome -->
@@ -17,6 +19,8 @@
         <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
         <!-- AdminLTE App -->
         <script src="/js/adminlte.min.js"></script>
+        <!-- Sweet Alert 2 -->
+        <script src="/plugins/sweetalert2/sweetalert2.min.js"></script>
     </head>
     <body class="hold-transition sidebar-mini">
         <!-- Site wrapper -->
@@ -80,7 +84,10 @@
                             <a href="{{ route('eventos.index') }}" class="nav-link" id="eventos"><i class="nav-icon fa-solid fa-calendar-days"></i><p>Eventos</p></a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('inscricao.index') }}" class="nav-link" id="inscricao"><i class="nav-icon fa-solid fa-calendar-check"></i><p>Eventos inscritos</p></a>
+                            <a href="{{ route('inscricao.index') }}" class="nav-link" id="inscricao"><i class="nav-icon fa-solid fa-calendar-day"></i><p>Eventos inscritos</p></a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('inscricao.index_checkin') }}" class="nav-link" id="checkin"><i class="nav-icon fa-solid fa-calendar-check"></i><p>Checkins</p></a>
                         </li>
                     </ul>
                 </nav>
@@ -111,9 +118,16 @@
 
             <div class="wrapper wrapper-content">
                 <div class="animated fadeInRightBig">
+                    <div class="info-box loading">
+                        <span class="info-box-icon"></span><p style="color:black">Carregando, aguarde...</p>
+                    </div>
                     @yield('content')
                 </div>
             </div>
+
+            <script>
+                $('.loading').hide();
+            </script>
 
             </section>
             <!-- /.content -->
@@ -133,5 +147,34 @@
         </aside>
         <!-- /.control-sidebar -->
         </div>
+
+        <style>
+            .loading.info-box:before {
+                width: 100%;
+                min-height: inherit;
+                z-index: 50;
+                background: rgba(255,255,255,0.8);
+                /*   border-radius: 3px; */
+                content: " ";
+                position: absolute;
+            }
+
+            .loading.info-box .info-box-icon i{
+                display: none;
+            }
+
+            .loading.info-box .info-box-icon:after {
+                position: absolute;
+                margin-top: 20px;
+                margin-left: -.4em;
+                /*   text-align: center; */
+                content: "\f021";
+                font: normal normal normal 1em/1 FontAwesome;
+                webkit-animation: fa-spin .8s infinite linear;
+                animation: fa-spin .8s infinite linear;
+                z-index: 999;
+                color: #555;
+            }
+        </style>
     </body>
 </html>

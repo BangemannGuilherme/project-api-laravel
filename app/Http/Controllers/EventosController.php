@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Eventos;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class EventosController extends Controller
 {
@@ -14,7 +16,12 @@ class EventosController extends Controller
      */
     public function index()
     {
-        $eventos = Eventos::all();
+        $user = Auth::id();
+
+        $eventos = Eventos::select('eventos.*')
+            ->whereNotIn('eventos.id', [DB::raw("SELECT eventos_id FROM inscricoes WHERE inscricoes.users_id = $user")])
+            ->get();
+
         return view('eventos.index', compact('eventos'));
     }
 

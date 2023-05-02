@@ -20,7 +20,7 @@ class InscricoesController extends Controller
     {
         $user = Auth::user();
         $eventos_id = $user->inscricoes->pluck('eventos_id')->toArray();
-        $inscricoes = Inscricoes::select('inscricoes.id as inscricao_id', 'inscricoes.eventos_id as eventos_id', 'eventos.*')
+        $inscricoes = Inscricoes::select('inscricoes.id as inscricao_id', 'inscricoes.eventos_id as eventos_id', 'inscricoes.checkin as checkin', 'eventos.*')
             ->join('eventos', 'eventos.id', '=', 'inscricoes.eventos_id')
             ->whereIn('eventos.id', $eventos_id)
             ->get();
@@ -80,8 +80,55 @@ class InscricoesController extends Controller
         return back()->with('success', 'Inscrição removida com sucesso!');
     }
 
+    /**
+     * Get checkins.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getCheckin()
+    {
+        $user = Auth::user();
+        $eventos_id = $user->inscricoes->pluck('eventos_id')->toArray();
+        $inscricoes = Inscricoes::select('inscricoes.id as inscricao_id', 'inscricoes.eventos_id as eventos_id', 'inscricoes.updated_at as hora_checkin', 'eventos.*')
+            ->join('eventos', 'eventos.id', '=', 'inscricoes.eventos_id')
+            ->where('inscricoes.checkin', true)
+            ->whereIn('eventos.id', $eventos_id)
+            ->get();
+
+        return view('inscricoes.index_checkin', compact('inscricoes'));
+    }
+
+    /**
+     * Set checkin.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function checkin(Request  $request)
+    {
+        $inscricao = Inscricoes::find($request->input('inscricao'));
+        $inscricao->checkin = true;
+        $inscricao->save();
+
+        $evento = Eventos::find($inscricao->eventos_id);
+
+        $details = [
+            'title' => 'Checkin realizado com sucesso!',
+            'body' => "Você realizou o checkin no seguinte evento:<br><h3>$evento->nome</h3><br>Você pode acompanhar os seus checkins em <a href=\"http://177.44.248.74/checkin\">Meus checkins</a>."
+        ];
+
+        // Envia e-mail
+        $this->sendMail($details);
+
+        return [
+            'success' => true,
+            'message' => 'Checkin realizado com sucesso!',
+            'evento' => $evento->nome
+        ];
+    }
+
     private function sendMail(Array $details)
     {
-        Mail::to('your_receiver_email@gmail.com')->send(new MailSender($details));
+        Mail::to('user_receiver_email@gmail.com')->send(new MailSender($details));
     }
 }
