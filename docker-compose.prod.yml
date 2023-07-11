@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+    app-prod:
+      build:
+        context: .
+        dockerfile: Dockerfile
+      container_name: app-prod
+      ports:
+        - 8181:8181
+      depends_on:
+        - db-prod
+      networks:
+        - mynetwork
+      extra_hosts:
+        - "host.docker.internal:host-gateway"
+
+    db-prod:
+      container_name: db-prod
+      image: postgres:14.8
+      restart: always
+      environment:
+        POSTGRES_USER: postgres
+        POSTGRES_DB: postgres
+        POSTGRES_HOST_AUTH_METHOD: trust
+      networks:
+        - mynetwork
+      extra_hosts:
+        - "host.docker.internal:host-gateway"
+
+networks:
+  mynetwork:
+    driver: bridge

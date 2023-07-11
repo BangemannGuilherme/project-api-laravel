@@ -1,0 +1,31 @@
+FROM php:8.2-apache
+RUN apt-get update -y && apt-get install -y libpq-dev openssl zip unzip git curl vim
+RUN docker-php-ext-install pdo_pgsql
+
+WORKDIR /var/www
+
+RUN git clone https://github.com/BangemannGuilherme/project-api-laravel.git
+WORKDIR /var/www/project-api-laravel
+
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN composer install
+
+RUN chown -R www-data:www-data . && chmod -R 775 .
+
+RUN cp .env.example .env
+
+# Substituir o valor do DB_HOST no arquivo .env pelo valor do argumento DB_HOST
+RUN sed -i "s/DB_DATABASE=microservice/DB_DATABASE=postgres/g" .env
+
+# Substituir o valor do DB_HOST no arquivo .env pelo valor do argumento DB_HOST
+RUN sed -i "s/DB_HOST=127.0.0.1/DB_HOST=db-homolog/g" .env
+
+RUN cat .env
+
+RUN php artisan key:generate
+
+RUN php artisan migrate --seed
+RUN ./vendor/bin/phpunit
+
+CMD php artisan serve
+EXPOSE 8282

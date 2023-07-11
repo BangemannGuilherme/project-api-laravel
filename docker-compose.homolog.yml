@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+    app-homolog:
+      build:
+        context: .
+        dockerfile: DockerfileHomolog
+      container_name: app-homolog
+      ports:
+        - 8282:8282
+      depends_on:
+        - db-homolog
+      networks:
+        - mynetwork
+      extra_hosts:
+        - "host.docker.internal:host-gateway"
+
+    db-homolog:
+      container_name: db-homolog
+      image: postgres:14.8
+      restart: always
+      environment:
+        POSTGRES_USER: postgres
+        POSTGRES_DB: postgres
+        POSTGRES_HOST_AUTH_METHOD: trust
+      networks:
+        - mynetwork
+      extra_hosts:
+        - "host.docker.internal:host-gateway"
+
+networks:
+  mynetwork:
+    driver: bridge
