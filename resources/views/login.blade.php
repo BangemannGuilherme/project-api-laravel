@@ -32,7 +32,7 @@
     @endif
 
     <div class="card-body">
-      <p class="login-box-msg">Faça o login para prosseguir</p>
+      <p class="login-box-msg">Faça o login para prosseguir TESTE</p>
 
       <form class="m-t" role="form" method="POST" action="{{ route('auth') }}">
         @csrf
