@@ -37,6 +37,3 @@ Route::post('/checkin', function(Request $request) {
 
     return response()->json($checkin);
 })->name('api.checkin');
-
-
-// Route::get('inscricao', [InscricoesController::class, 'store'])->name('api.inscricao');
