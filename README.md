@@ -9,3 +9,6 @@
 * Ferramenta de Versionamento: Git (Github)
 * Ferramenta de Testes: PHPUnit
 * Demais ferramentas: Laravel, SSH, Docker e Docker Compose.
+
+
+![GCS.png](GCS.png)
